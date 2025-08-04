@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Produtos - Marketplace Bazan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.delete-btn {
+            background-color: #e74c3c;
+        }
+        button.delete-btn:hover {
+            background-color: #c0392b;
+        }
+        button.update-btn {
+            background-color: #f39c12;
+        }
+        button.update-btn:hover {
+            background-color: #e67e22;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #444;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .message.info { /* Adicionado para mensagens informativas */
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .result-box {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciamento de Produtos</h1>
+
+        <div class="section">
+            <h2>Cadastrar Novo Produto</h2>
+            <label for="nomeProduto">Nome:</label>
+            <input type="text" id="nomeProduto" placeholder="Nome do produto">
+
+            <label for="precoProduto">Preço:</label>
+            <input type="number" id="precoProduto" step="0.01" placeholder="Preço (ex: 99.99)">
+
+            <label for="quantidadeProduto">Quantidade:</label>
+            <input type="number" id="quantidadeProduto" placeholder="Quantidade">
+
+            <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+            <div id="cadastroMessage" class="message"></div>
+        </div>
+
+        <div class="section">
+            <h2>Listar Todos os Produtos</h2>
+            <button onclick="listarProdutos()">Listar Produtos</button>
+            <div id="listaMessage" class="message"></div>
+            <table id="tabelaProdutos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Quantidade</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Buscar Produto por ID</h2>
+            <label for="buscarIdProduto">ID do Produto:</label>
+            <input type="number" id="buscarIdProduto" placeholder="ID do produto">
+            <button onclick="buscarProduto()">Buscar Produto</button>
+            <div id="buscarMessage" class="message"></div>
+            <div id="resultadoBusca" class="result-box"></div>
+        </div>
+
+        <div class="section">
+            <h2>Operações de Atualização por ID</h2>
+
+            <h3>Vender Produto (Diminuir Quantidade)</h3>
+            <label for="venderIdProduto">ID do Produto:</label>
+            <input type="number" id="venderIdProduto" placeholder="ID do produto">
+            <label for="venderQuantidade">Quantidade a Vender:</label>
+            <input type="number" id="venderQuantidade" placeholder="Quantidade">
+            <button class="update-btn" onclick="venderProduto()">Vender Produto</button>
+            <div id="venderMessage" class="message"></div>
+
+            <h3>Atualizar Preço</h3>
+            <label for="atualizarPrecoId">ID do Produto:</label>
+            <input type="number" id="atualizarPrecoId" placeholder="ID do produto">
+            <label for="novoPreco">Novo Preço:</label>
+            <input type="number" id="novoPreco" step="0.01" placeholder="Novo preço (ex: 120.00)">
+            <button class="update-btn" onclick="atualizarPreco()">Atualizar Preço</button>
+            <div id="atualizarPrecoMessage" class="message"></div>
+
+            <h3>Alimentar Estoque (Atualizar Quantidade)</h3>
+            <label for="alimentarEstoqueId">ID do Produto:</label>
+            <input type="number" id="alimentarEstoqueId" placeholder="ID do produto">
+            <label for="novaQuantidade">Nova Quantidade Total:</label>
+            <input type="number" id="novaQuantidade" placeholder="Quantidade total no estoque">
+            <button class="update-btn" onclick="alimentarEstoque()">Alimentar Estoque</button>
+            <div id="alimentarEstoqueMessage" class="message"></div>
+        </div>
+
+        <div class="section">
+            <h2>Deletar Produto por ID</h2>
+            <label for="deletarIdProduto">ID do Produto:</label>
+            <input type="number" id="deletarIdProduto" placeholder="ID do produto">
+            <button class="delete-btn" onclick="deletarProduto()">Deletar Produto</button>
+            <div id="deletarMessage" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/produtos';
+
+        // Variáveis globais para armazenar as credenciais
+        let globalUsername = '';
+        let globalPassword = '';
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `message ${type}`;
+            setTimeout(() => {
+                element.textContent = '';
+                element.className = 'message';
+            }, 5000);
+        }
+
+        async function cadastrarProduto() {
+            const nome = document.getElementById('nomeProduto').value;
+            const preco = parseFloat(document.getElementById('precoProduto').value);
+            const quantidade = parseInt(document.getElementById('quantidadeProduto').value);
+
+            if (!nome || isNaN(preco) || isNaN(quantidade)) {
+                showMessage('cadastroMessage', 'Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            const produto = { nome, preco, quantidade };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(produto)
+                });
+
+                if (response.ok) {
+                    showMessage('cadastroMessage', 'Produto cadastrado com sucesso!', 'success');
+                    document.getElementById('nomeProduto').value = '';
+                    document.getElementById('precoProduto').value = '';
+                    document.getElementById('quantidadeProduto').value = '';
+                    // Não chamamos listarProdutos aqui, pois ele agora exige login.
+                    // O usuário precisará clicar no botão de listar novamente após o cadastro.
+                } else {
+                    const errorData = await response.json();
+                    showMessage('cadastroMessage', `Erro ao cadastrar produto: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('cadastroMessage', 'Erro de conexão com a API.', 'error');
+            }
+        }
+
+        async function listarProdutos() {
+            // Solicita credenciais apenas para esta operação
+            const username = prompt("Digite seu nome de usuário para listar produtos:");
+            const password = prompt("Digite sua senha para listar produtos:");
+
+            if (!username || !password) {
+                showMessage('listaMessage', 'Nome de usuário e senha são obrigatórios para listar produtos.', 'error');
+                return;
+            }
+
+            // Armazena as credenciais para reuso, se necessário (opcional, para conveniência do usuário)
+            globalUsername = username;
+            globalPassword = password;
+
+            try {
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+
+                // Codifica "username:password" em Base64 para o cabeçalho Authorization
+                const authString = btoa(`${username}:${password}`);
+                headers['Authorization'] = `Basic ${authString}`;
+
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: headers
+                });
+
+                if (response.ok) {
+                    const produtos = await response.json();
+                    const tbody = document.getElementById('tabelaProdutos').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = ''; // Limpa a tabela antes de adicionar novos dados
+
+                    if (produtos.length === 0) {
+                        showMessage('listaMessage', 'Nenhum produto encontrado.', 'info');
+                    } else {
+                        showMessage('listaMessage', 'Produtos listados com sucesso!', 'success');
+                        produtos.forEach(produto => {
+                            const row = tbody.insertRow();
+                            row.insertCell(0).textContent = produto.id;
+                            row.insertCell(1).textContent = produto.nome;
+                            row.insertCell(2).textContent = `R$ ${produto.preco.toFixed(2)}`;
+                            row.insertCell(3).textContent = produto.quantidade;
+                            const actionsCell = row.insertCell(4);
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.textContent = 'Deletar';
+                            deleteBtn.className = 'delete-btn';
+                            deleteBtn.onclick = () => {
+                                document.getElementById('deletarIdProduto').value = produto.id;
+                                deletarProduto();
+                            };
+                            actionsCell.appendChild(deleteBtn);
+                        });
+                    }
+                } else if (response.status === 401 || response.status === 403) {
+                    showMessage('listaMessage', 'Acesso negado. Credenciais inválidas.', 'error');
+                    const tbody = document.getElementById('tabelaProdutos').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Acesso negado ou credenciais inválidas.</td></tr>';
+                } else {
+                    const errorData = await response.json();
+                    showMessage('listaMessage', `Erro ao listar produtos: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('listaMessage', 'Erro de conexão com a API. Verifique se o servidor está rodando.', 'error');
+            }
+        }
+
+        async function buscarProduto() {
+            const id = document.getElementById('buscarIdProduto').value;
+            const resultadoBuscaDiv = document.getElementById('resultadoBusca');
+            resultadoBuscaDiv.innerHTML = '';
+
+            if (!id) {
+                showMessage('buscarMessage', 'Por favor, insira o ID do produto.', 'error');
+                return;
+            }
+
+            try {
+                // Esta requisição não precisa de autenticação, conforme seu SecurityConfig
+                const response = await fetch(`${API_URL}/${id}`);
+                if (response.ok) {
+                    const produto = await response.json();
+                    resultadoBuscaDiv.textContent = JSON.stringify(produto, null, 2);
+                    showMessage('buscarMessage', `Produto ID ${id} encontrado!`, 'success');
+                } else if (response.status === 404) {
+                    showMessage('buscarMessage', `Produto com ID ${id} não encontrado.`, 'error');
+                    resultadoBuscaDiv.textContent = 'Nenhum produto encontrado com este ID.';
+                } else {
+                    const errorData = await response.json();
+                    showMessage('buscarMessage', `Erro ao buscar produto: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('buscarMessage', 'Erro de conexão com a API.', 'error');
+            }
+        }
+
+        async function deletarProduto() {
+            const id = document.getElementById('deletarIdProduto').value;
+
+            if (!id) {
+                showMessage('deletarMessage', 'Por favor, insira o ID do produto para deletar.', 'error');
+                return;
+            }
+
+            if (!confirm(`Tem certeza que deseja deletar o produto com ID ${id}?`)) {
+                return;
+            }
+
+            try {
+                // Esta requisição não precisa de autenticação, conforme seu SecurityConfig
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showMessage('deletarMessage', `Produto ID ${id} deletado com sucesso!`, 'success');
+                    document.getElementById('deletarIdProduto').value = '';
+                    // Não chamamos listarProdutos aqui, pois ele agora exige login.
+                } else if (response.status === 404) {
+                    showMessage('deletarMessage', `Produto com ID ${id} não encontrado para deleção.`, 'error');
+                }
+                 else {
+                    const errorData = await response.json();
+                    showMessage('deletarMessage', `Erro ao deletar produto: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('deletarMessage', 'Erro de conexão com a API.', 'error');
+            }
+        }
+
+        async function venderProduto() {
+            const id = document.getElementById('venderIdProduto').value;
+            const quantidade = parseInt(document.getElementById('venderQuantidade').value);
+
+            if (!id || isNaN(quantidade) || quantidade <= 0) {
+                showMessage('venderMessage', 'Preencha o ID e uma quantidade válida para vender.', 'error');
+                return;
+            }
+
+            const produtoParaVenda = { quantidade: quantidade };
+
+            try {
+                // Esta requisição não precisa de autenticação, conforme seu SecurityConfig
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(produtoParaVenda)
+                });
+
+                if (response.ok) {
+                    showMessage('venderMessage', `Produto ID ${id}: ${quantidade} unidades vendidas com sucesso!`, 'success');
+                    document.getElementById('venderIdProduto').value = '';
+                    document.getElementById('venderQuantidade').value = '';
+                    // Não chamamos listarProdutos aqui, pois ele agora exige login.
+                } else if (response.status === 404) {
+                    showMessage('venderMessage', `Produto com ID ${id} não encontrado para venda.`, 'error');
+                }
+                 else {
+                    const errorData = await response.json();
+                    showMessage('venderMessage', `Erro ao vender produto: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('venderMessage', 'Erro de conexão com a API.', 'error');
+            }
+        }
+
+        async function atualizarPreco() {
+            const id = document.getElementById('atualizarPrecoId').value;
+            const novoPreco = parseFloat(document.getElementById('novoPreco').value);
+
+            if (!id || isNaN(novoPreco) || novoPreco < 0) {
+                showMessage('atualizarPrecoMessage', 'Preencha o ID e um preço válido.', 'error');
+                return;
+            }
+
+            const produtoParaAtualizar = { preco: novoPreco };
+
+            try {
+                // Esta requisição não precisa de autenticação, conforme seu SecurityConfig
+                const response = await fetch(`${API_URL}/${id}/preco`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(produtoParaAtualizar)
+                });
+
+                if (response.ok) {
+                    showMessage('atualizarPrecoMessage', `Preço do produto ID ${id} atualizado para R$ ${novoPreco.toFixed(2)}!`, 'success');
+                    document.getElementById('atualizarPrecoId').value = '';
+                    document.getElementById('novoPreco').value = '';
+                    // Não chamamos listarProdutos aqui, pois ele agora exige login.
+                } else if (response.status === 404) {
+                    showMessage('atualizarPrecoMessage', `Produto com ID ${id} não encontrado para atualização de preço.`, 'error');
+                } else {
+                    const errorData = await response.json();
+                    showMessage('atualizarPrecoMessage', `Erro ao atualizar preço: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('atualizarPrecoMessage', 'Erro de conexão com a API.', 'error');
+            }
+        }
+
+        async function alimentarEstoque() {
+            const id = document.getElementById('alimentarEstoqueId').value;
+            const novaQuantidade = parseInt(document.getElementById('novaQuantidade').value);
+
+            if (!id || isNaN(novaQuantidade) || novaQuantidade < 0) {
+                showMessage('alimentarEstoqueMessage', 'Preencha o ID e uma quantidade válida para alimentar o estoque.', 'error');
+                return;
+            }
+
+            const produtoParaAtualizar = { quantidade: novaQuantidade };
+
+            try {
+                // Esta requisição não precisa de autenticação, conforme seu SecurityConfig
+                const response = await fetch(`${API_URL}/${id}/quantidade`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(produtoParaAtualizar)
+                });
+
+                if (response.ok) {
+                    showMessage('alimentarEstoqueMessage', `Estoque do produto ID ${id} atualizado para ${novaQuantidade} unidades!`, 'success');
+                    document.getElementById('alimentarEstoqueId').value = '';
+                    document.getElementById('novaQuantidade').value = '';
+                    // Não chamamos listarProdutos aqui, pois ele agora exige login.
+                } else if (response.status === 404) {
+                    showMessage('alimentarEstoqueMessage', `Produto com ID ${id} não encontrado para alimentar estoque.`, 'error');
+                } else {
+                    const errorData = await response.json();
+                    showMessage('alimentarEstoqueMessage', `Erro ao alimentar estoque: ${errorData.message || response.statusText}`, 'error');
+                }
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                showMessage('alimentarEstoqueMessage', 'Erro de conexão com a API.', 'error');
+            }
+        }
+
+        // Não chame listarProdutos no window.onload, pois ele agora exige login.
+        // O usuário precisará clicar no botão "Listar Produtos" para iniciar o processo de autenticação.
+        // window.onload = listarProdutos;
+    </script>
+</body>
+</html>
