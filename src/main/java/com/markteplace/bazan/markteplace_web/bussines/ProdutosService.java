@@ -89,7 +89,18 @@ public class ProdutosService {
 
     }
 
-    public void atualizarEstoque (Long id){
+    public void atualizarEstoque (Long id, Integer quantidade){
+
+        ProdutosEntity produtoNoBanco = mostrarProduto(id);
+
+        Integer novaQuantidade = produtoNoBanco.getQuantidade() + quantidade;
+
+        if (novaQuantidade < 0) {
+            throw new RuntimeException("Estoque não pode ser negativo após a atualização.");
+        }
+
+        produtoNoBanco.setQuantidade(novaQuantidade);
+        repositorio.saveAndFlush(produtoNoBanco);
 
     }
 

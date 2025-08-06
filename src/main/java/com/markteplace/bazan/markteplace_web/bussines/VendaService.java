@@ -16,7 +16,7 @@ public class VendaService {
 
     private final VendasRepository repositorio;
     private final ProdutosService produtosService;
-    private final ProdutosEntity produtos;
+
 
 
 
@@ -28,14 +28,16 @@ public class VendaService {
     public VendasEntity realizarVendas(Long id, Integer quantidade){
 
         ProdutosEntity produto = produtosService.mostrarProduto(id);
+
         if (produto.getQuantidade() < quantidade){
             throw new RuntimeException("Estoque insuficiente para venda");
         }
 
-        produtosService.alimentarEstoque(produto , id);
+        produtosService.atualizarEstoque(id, -quantidade);
 
        VendasEntity novaVenda = new VendasEntity();
         novaVenda.setProdutos(produto);
+        novaVenda.setPreco_vendido(produto.getPreco());
         novaVenda.setQuantidade_vendida(quantidade);
 
         return repositorio.saveAndFlush(novaVenda);
