@@ -2,7 +2,9 @@ package com.markteplace.bazan.markteplace_web.bussines;
 
 
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
+import com.markteplace.bazan.markteplace_web.infrastructure.entity.VendasEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.ProdutosRepositorios;
+import com.markteplace.bazan.markteplace_web.infrastructure.repository.VendasRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,13 +49,13 @@ public class ProdutosService {
 
                 .nome(produtoNoBanco.getNome())
                 .preco(produtoNoBanco.getPreco())
-                .quantidade((produtoNoBanco.getQuantidade() - produto.getQuantidade() < 0) ? 0 : produtoNoBanco.getQuantidade()- produto.getQuantidade())
+                .quantidade((produtoNoBanco.getQuantidade() - produto.getQuantidade()))
                 .id(produtoNoBanco.getId())
                 .build();
 
-
-
         repositorio.saveAndFlush(produtoNoBancoAtualizado);
+
+
     }
 
     public void atualizarPreco(ProdutosEntity produto, Long id) {
@@ -84,6 +86,10 @@ public class ProdutosService {
                 .build();
 
         repositorio.saveAndFlush(produtoNoBancoAtualizado);
+
+    }
+
+    public void atualizarEstoque (Long id){
 
     }
 
