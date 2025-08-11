@@ -81,7 +81,7 @@ public class ProdutosService {
 
            .nome(produtoNoBanco.getNome())
                 .preco(produtoNoBanco.getPreco())
-                .quantidade(produto.getQuantidade())
+                .quantidade(produto.getQuantidade() + produto.getQuantidade())
                 .id(produtoNoBanco.getId())
                 .build();
 

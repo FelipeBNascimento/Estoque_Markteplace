@@ -1,8 +1,10 @@
 package com.markteplace.bazan.markteplace_web.controller;
 
 import com.markteplace.bazan.markteplace_web.bussines.VendaService;
+import com.markteplace.bazan.markteplace_web.dto.VendasDto;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.VendasEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +30,14 @@ public class VendasController {
 
          return ResponseEntity.ok(service.buscarTodasVendas());
     }
+
+    @PostMapping("/realizar-venda")
+    public ResponseEntity<Void> realizarVendasMultiplosProdutos (@RequestBody VendasDto vendas){
+
+        service.vendasMultiplosProdutos(vendas);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }
