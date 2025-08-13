@@ -51,12 +51,12 @@ public class ProdutosController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> atualizarEstoque(@RequestBody ProdutosEntity produto, @PathVariable Long id) {
-
-        service.venderProduto(produto, id);
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Void> atualizarEstoque(@RequestBody ProdutosEntity produto, @PathVariable Long id) {
+//
+//        service.venderProduto(produto, id);
+//        return ResponseEntity.ok().build();
+//    }
 
 
     @PutMapping("/{id}/preco")

@@ -10,6 +10,4 @@ public class VendasDto {
 
     private List<ItensVendidosDto> itens;
 
-
-
 }

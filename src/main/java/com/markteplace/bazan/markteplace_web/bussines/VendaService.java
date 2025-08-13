@@ -2,10 +2,9 @@ package com.markteplace.bazan.markteplace_web.bussines;
 
 import com.markteplace.bazan.markteplace_web.dto.ItensVendidosDto;
 import com.markteplace.bazan.markteplace_web.dto.VendasDto;
-import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ItemVendaEntity;
+import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.ItemVendaRepository;
-import com.markteplace.bazan.markteplace_web.infrastructure.repository.VendasRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,22 +20,24 @@ public class VendaService {
     private final ProdutosService produtosService;
 
 
-    public List<ItemVendaEntity> buscarTodasVendas() {
+
+
+    public List<ItemVendaEntity> buscarTodasVendas(){
 
         return repositorio.findAll();
     }
 
-    public ItemVendaEntity realizarVendas(Long id, Integer quantidade) {
+    public ItemVendaEntity realizarVendas(Long id, Integer quantidade){
 
         ProdutosEntity produto = produtosService.mostrarProduto(id);
 
-        if (produto.getQuantidade() < quantidade) {
+        if (produto.getQuantidade() < quantidade){
             throw new RuntimeException("Estoque insuficiente para venda");
         }
 
         produtosService.atualizarEstoque(id, -quantidade);
 
-        ItemVendaEntity novaVenda = new ItemVendaEntity();
+       ItemVendaEntity novaVenda = new ItemVendaEntity();
         novaVenda.setProdutos(produto);
         novaVenda.setPreco_vendido(produto.getPreco());
         novaVenda.setQuantidade_vendida(quantidade);
@@ -45,30 +46,27 @@ public class VendaService {
 
     }
 
-    public void fazerVariasVendas(VendasDto vendas) {
+    public void vendasMultiplosProdutos (VendasDto vendas){
 
-        for (ItensVendidosDto item : vendas.getItens()) {
 
-            ProdutosEntity produto = produtosService.mostrarProduto(item.getIdProduto());
+        for (ItensVendidosDto itens : vendas.getItens()){
 
-            if (produto.getQuantidade() < item.getQuantidade()) {
+            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+
+            if (produto.getQuantidade() < itens.getQuantidade()){
                 throw new RuntimeException("Estoque insuficiente para venda");
             }
 
-            produtosService.atualizarEstoque(item.getIdProduto(), -item.getQuantidade());
+            produtosService.atualizarEstoque(itens.getIdProduto(), -itens.getQuantidade());
 
             ItemVendaEntity novaVenda = new ItemVendaEntity();
+
             novaVenda.setProdutos(produto);
             novaVenda.setPreco_vendido(produto.getPreco());
-            novaVenda.setQuantidade_vendida(item.getQuantidade());
+            novaVenda.setQuantidade_vendida(itens.getQuantidade());
 
             repositorio.saveAndFlush(novaVenda);
-
-
         }
-
     }
-
-    public
 
 }
