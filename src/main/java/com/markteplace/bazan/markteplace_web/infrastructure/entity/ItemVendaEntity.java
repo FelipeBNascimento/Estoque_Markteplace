@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-@Table(name = "vendas")
-public class VendasEntity {
+@Table(name = "itens_vendas")
+public class ItemVendaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,11 @@ public class VendasEntity {
     @ManyToOne
     @JoinColumn(name = "id_produto", nullable = false)
     private ProdutosEntity produtos;
+
+    @ManyToOne
+    @JoinColumn (name = " venda_id")
+    private VendaEntity venda;
+
 
     @Column(name="quantidade_vendida")
     private Integer quantidade_vendida;

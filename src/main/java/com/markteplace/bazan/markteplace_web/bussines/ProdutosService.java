@@ -2,9 +2,7 @@ package com.markteplace.bazan.markteplace_web.bussines;
 
 
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
-import com.markteplace.bazan.markteplace_web.infrastructure.entity.VendasEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.ProdutosRepositorios;
-import com.markteplace.bazan.markteplace_web.infrastructure.repository.VendasRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
