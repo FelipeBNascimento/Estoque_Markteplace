@@ -7,4 +7,5 @@ public class ItensVendidosDto {
 
     private Long idProduto;
     private Integer quantidade;
+    private Double preco;
 }

@@ -40,5 +40,14 @@ public class VendasController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/variasVendas")
+
+    public ResponseEntity<Void> variasVendas(@RequestBody VendasDto vendas){
+
+        service.variasVendas(vendas);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }
