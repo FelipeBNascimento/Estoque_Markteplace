@@ -30,4 +30,8 @@ public class ItemVendaEntity {
 
     @Column (name="preco_vendido")
     private Double preco_vendido;
+
+    @Column(name = "nome_produto")
+    private String nome_produto;
+
 }

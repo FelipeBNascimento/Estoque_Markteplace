@@ -76,7 +76,6 @@ public class VendaService {
         VendaEntity novaVenda = new VendaEntity();
 
         novaVenda.setData(LocalDateTime.now());
-
         vendas_repositorio.saveAndFlush(novaVenda);
 
 
@@ -92,6 +91,7 @@ public class VendaService {
 
             ItemVendaEntity itemVendido = new ItemVendaEntity();
             itemVendido.setProdutos(produto);
+            itemVendido.setNome_produto(produto.getNome());
             itemVendido.setPreco_vendido(produto.getPreco());
             itemVendido.setQuantidade_vendida(itens.getQuantidade());
 
