@@ -21,7 +21,7 @@ public class ItemVendaEntity {
     private ProdutosEntity produtos;
 
     @ManyToOne
-    @JoinColumn (name = " venda_id")
+    @JoinColumn (name = "venda_id")
     private VendaEntity venda;
 
 

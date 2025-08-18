@@ -55,6 +55,8 @@ public class SecurityConfig {
         // Usa BCrypt para codificar senhas. É uma prática segura.
         return new BCryptPasswordEncoder();
     }
+
+
 }
 
 

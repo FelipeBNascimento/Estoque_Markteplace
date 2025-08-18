@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+
 public class VendaService {
 
     private final ItemVendaRepository itensRepositorios;
@@ -48,16 +48,22 @@ public class VendaService {
 
     }
 
+    @Transactional
     public void vendasMultiplosProdutos(VendasDto vendas) {
 
+
+        for (ItensVendidosDto itens : vendas.getItens()){
+
+            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+            if (produto.getQuantidade() < itens.getQuantidade()) {
+                throw new EstoqueInsuficienteExceptions("Estoque insuficiente");
+            }
+
+        }
 
         for (ItensVendidosDto itens : vendas.getItens()) {
 
             ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
-
-            if (produto.getQuantidade() < itens.getQuantidade()) {
-                throw new RuntimeException("Estoque insuficiente para venda");
-            }
 
             produtosService.atualizarEstoque(itens.getIdProduto(), -itens.getQuantidade());
 
@@ -74,18 +80,24 @@ public class VendaService {
     public VendaEntity variasVendas(VendasDto listaVendas) {
 
         VendaEntity novaVenda = new VendaEntity();
-
         novaVenda.setData(LocalDateTime.now());
         vendas_repositorio.saveAndFlush(novaVenda);
+
+
+        for (ItensVendidosDto itens : listaVendas.getItens()){
+
+            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+            if (produto.getQuantidade() < itens.getQuantidade()) {
+                throw new EstoqueInsuficienteExceptions("Estoque insuficiente, quantidade :" + itens.getQuantidade());
+            }
+
+        }
 
 
         for (ItensVendidosDto itens : listaVendas.getItens()) {
 
             ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
 
-            if (produto.getQuantidade() < itens.getQuantidade()) {
-                throw new RuntimeException("Estoque insuficientes");
-            }
 
             produtosService.atualizarEstoque(itens.getIdProduto(), -itens.getQuantidade());
 
