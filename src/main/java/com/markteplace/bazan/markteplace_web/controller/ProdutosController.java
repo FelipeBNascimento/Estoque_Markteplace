@@ -59,11 +59,13 @@ public class ProdutosController {
         return ResponseEntity.ok().build();
     }
 
+
+    // testar amanha mudança de função da classe service
     @PutMapping("/{id}/quantidade")
 
     public ResponseEntity<Void> atualizarQuantidade(@RequestBody ProdutosEntity produto, @PathVariable Long id){
 
-        service.alimentarEstoque(produto, id);
+        service.atualizarEstoque(id, produto.getQuantidade());
         return ResponseEntity.ok().build();
 
     }

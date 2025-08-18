@@ -29,6 +29,7 @@ public class VendaService {
         return itensRepositorios.findAll();
     }
 
+    @Transactional
     public ItemVendaEntity realizarVendas(Long id, Integer quantidade) {
 
         ProdutosEntity produto = produtosService.mostrarProduto(id);
@@ -77,6 +78,7 @@ public class VendaService {
         }
     }
 
+    @Transactional
     public VendaEntity variasVendas(VendasDto listaVendas) {
 
         VendaEntity novaVenda = new VendaEntity();
