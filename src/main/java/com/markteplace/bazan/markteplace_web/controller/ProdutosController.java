@@ -2,6 +2,7 @@ package com.markteplace.bazan.markteplace_web.controller;
 
 
 import com.markteplace.bazan.markteplace_web.bussines.ProdutosService;
+import com.markteplace.bazan.markteplace_web.dto.responses.ProdutoResponse;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ProdutosController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutosEntity>> mostrarEstoque() {
+    public ResponseEntity<List<ProdutoResponse>> mostrarEstoque() {
 
 
         return ResponseEntity.ok(service.mostrarEstoque());
@@ -36,9 +37,9 @@ public class ProdutosController {
 
     @GetMapping("/{id}")
 
-    public ResponseEntity<ProdutosEntity> mostrarProduto(@PathVariable Long id) {
+    public ResponseEntity<ProdutoResponse> mostrarProduto(@PathVariable Long id) {
 
-        return ResponseEntity.ok(service.mostrarProduto(id));
+        return ResponseEntity.ok(service.mostrarProdutoPeloId(id));
     }
 
 
@@ -51,7 +52,6 @@ public class ProdutosController {
     }
 
 
-
     @PutMapping("/{id}/preco")
     public ResponseEntity<Void> atualizarPreco(@RequestBody ProdutosEntity produto, @PathVariable Long id) {
 
@@ -60,10 +60,10 @@ public class ProdutosController {
     }
 
 
-    // testar amanha mudança de função da classe service
     @PutMapping("/{id}/quantidade")
 
-    public ResponseEntity<Void> atualizarQuantidade(@RequestBody ProdutosEntity produto, @PathVariable Long id){
+    public ResponseEntity<Void> atualizarQuantidade(@RequestBody ProdutosEntity produto,
+                                                    @PathVariable Long id){
 
         service.atualizarEstoque(id, produto.getQuantidade());
         return ResponseEntity.ok().build();

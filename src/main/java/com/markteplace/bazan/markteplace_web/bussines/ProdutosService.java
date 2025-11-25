@@ -1,6 +1,8 @@
 package com.markteplace.bazan.markteplace_web.bussines;
 
 
+import com.markteplace.bazan.markteplace_web.dto.ConverterProduto;
+import com.markteplace.bazan.markteplace_web.dto.responses.ProdutoResponse;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.exceptions.EstoqueInsuficienteExceptions;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.ProdutosRepositorios;
@@ -14,11 +16,15 @@ import java.util.List;
 public class ProdutosService {
 
     private final ProdutosRepositorios repositorio;
+    private final ConverterProduto converterProduto;
 
 
-    public List<ProdutosEntity> mostrarEstoque() {
+    public List<ProdutoResponse> mostrarEstoque() {
 
-        return repositorio.findAll();
+        List<ProdutoResponse> produtos = converterProduto.listaProdutosResponses(
+                repositorio.findAll());
+
+        return produtos;
     }
 
     public void cadastrarProduto(ProdutosEntity produtos) {
@@ -31,18 +37,16 @@ public class ProdutosService {
         repositorio.deleteById(id);
     }
 
-    public ProdutosEntity mostrarProduto(Long id) {
+    public ProdutoResponse mostrarProdutoPeloId(Long id) {
 
-        return repositorio.findById(id).orElseThrow(
-
-                () -> new RuntimeException("Id não encontrado")
-        );
-
+        ProdutoResponse produto = converterProduto.paraProdutoResponse(
+                buscarProdutopeloId(id));
+        return produto;
     }
 
     public void atualizarPreco(ProdutosEntity produto, Long id) {
 
-        ProdutosEntity produtoNoBanco = mostrarProduto(id);
+        ProdutosEntity produtoNoBanco = buscarProdutopeloId(id);
 
         ProdutosEntity produtoNoBancoAtualizado = ProdutosEntity.builder()
 
@@ -58,7 +62,7 @@ public class ProdutosService {
 
     public void atualizarEstoque (Long id, Integer quantidade){
 
-        ProdutosEntity produtoNoBanco = mostrarProduto(id);
+        ProdutosEntity produtoNoBanco = buscarProdutopeloId(id);
 
         Integer novaQuantidade = produtoNoBanco.getQuantidade() + quantidade;
 
@@ -72,10 +76,23 @@ public class ProdutosService {
 
     public void verificarQuantidade(Integer quantidade){
 
-        // fazer tratamento de erros caso nao quantidade seja negativa
+        // fazer tratamento de erros para que a quantidade não seja negativa
         if (quantidade < 0) {
             throw new EstoqueInsuficienteExceptions("Estoque não pode ser negativo após a atualização.");
         }
+    }
+
+
+    // Metodo criado para usar em outros metodos
+    public ProdutosEntity buscarProdutopeloId(Long id){
+
+        ProdutosEntity produto = repositorio.findById(id).orElseThrow(
+
+                () -> new RuntimeException("Id não encontrado")
+        );
+
+        return produto;
+
     }
 
 }

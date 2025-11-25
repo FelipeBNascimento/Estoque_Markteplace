@@ -34,7 +34,7 @@ public class VendaService {
     @Transactional
     public ItemVendaEntity realizarVendas(Long idproduto, Integer quantidade) {
 
-        ProdutosEntity produto = produtosService.mostrarProduto(idproduto);
+        ProdutosEntity produto = produtosService.buscarProdutopeloId(idproduto);
 
         if (produto.getQuantidade() < quantidade) {
             throw new RuntimeException("Estoque insuficiente para venda");
@@ -57,7 +57,7 @@ public class VendaService {
 
         for (ItensVendidosDto itens : vendas.getItens()){
 
-            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+            ProdutosEntity produto = produtosService.buscarProdutopeloId(itens.getIdProduto());
             if (produto.getQuantidade() < itens.getQuantidade()) {
                 throw new EstoqueInsuficienteExceptions("Estoque insuficiente");
             }
@@ -66,7 +66,7 @@ public class VendaService {
 
         for (ItensVendidosDto itens : vendas.getItens()) {
 
-            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+            ProdutosEntity produto = produtosService.buscarProdutopeloId(itens.getIdProduto());
 
             produtosService.atualizarEstoque(itens.getIdProduto(), -itens.getQuantidade());
 
@@ -90,7 +90,7 @@ public class VendaService {
 
         for (ItensVendidosDto itens : listaVendas.getItens()){
 
-            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+            ProdutosEntity produto = produtosService.buscarProdutopeloId(itens.getIdProduto());
             if (produto.getQuantidade() < itens.getQuantidade()) {
                 throw new EstoqueInsuficienteExceptions("Estoque insuficiente, quantidade :" + itens.getQuantidade());
             }
@@ -100,7 +100,7 @@ public class VendaService {
 
         for (ItensVendidosDto itens : listaVendas.getItens()) {
 
-            ProdutosEntity produto = produtosService.mostrarProduto(itens.getIdProduto());
+            ProdutosEntity produto = produtosService.buscarProdutopeloId(itens.getIdProduto());
 
 
             produtosService.atualizarEstoque(itens.getIdProduto(), -itens.getQuantidade());
