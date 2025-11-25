@@ -3,6 +3,8 @@ package com.markteplace.bazan.markteplace_web.infrastructure.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +31,7 @@ public class ItemVendaEntity {
     private Integer quantidade_vendida;
 
     @Column (name="preco_vendido")
-    private Double preco_vendido;
+    private BigDecimal preco_vendido;
 
     @Column(name = "nome_produto")
     private String nome_produto;

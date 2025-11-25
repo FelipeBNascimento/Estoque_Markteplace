@@ -4,7 +4,7 @@ package com.markteplace.bazan.markteplace_web.infrastructure.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +21,6 @@ public class VendaEntity {
     private List<ItemVendaEntity> itensVenda = new ArrayList<>();
 
     @Column (name = "DataVenda")
-    private LocalDateTime data;
+    private LocalDate data;
 
 }

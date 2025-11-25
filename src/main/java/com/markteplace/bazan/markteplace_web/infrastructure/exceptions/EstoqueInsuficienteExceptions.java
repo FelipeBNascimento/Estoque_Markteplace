@@ -1,4 +1,4 @@
-package com.markteplace.bazan.markteplace_web.bussines;
+package com.markteplace.bazan.markteplace_web.infrastructure.exceptions;
 
 public class EstoqueInsuficienteExceptions extends RuntimeException{
 

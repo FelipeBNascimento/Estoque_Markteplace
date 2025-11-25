@@ -2,6 +2,7 @@ package com.markteplace.bazan.markteplace_web.bussines;
 
 
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
+import com.markteplace.bazan.markteplace_web.infrastructure.exceptions.EstoqueInsuficienteExceptions;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.ProdutosRepositorios;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,23 +39,6 @@ public class ProdutosService {
         );
 
     }
-//
-//    public void venderProduto(ProdutosEntity produto, Long id) {
-//
-//        ProdutosEntity produtoNoBanco = mostrarProduto(id);
-//
-//        ProdutosEntity produtoNoBancoAtualizado = ProdutosEntity.builder()
-//
-//                .nome(produtoNoBanco.getNome())
-//                .preco(produtoNoBanco.getPreco())
-//                .quantidade((produtoNoBanco.getQuantidade() - produto.getQuantidade()))
-//                .id(produtoNoBanco.getId())
-//                .build();
-//
-//        repositorio.saveAndFlush(produtoNoBancoAtualizado);
-//
-//
-//    }
 
     public void atualizarPreco(ProdutosEntity produto, Long id) {
 
@@ -71,21 +55,6 @@ public class ProdutosService {
         repositorio.saveAndFlush(produtoNoBancoAtualizado);
     }
 
-//    public void alimentarEstoque(ProdutosEntity produto, Long id){
-//
-//        ProdutosEntity produtoNoBanco = mostrarProduto(id);
-//
-//        ProdutosEntity produtoNoBancoAtualizado = ProdutosEntity.builder()
-//
-//                .nome(produtoNoBanco.getNome())
-//                .preco(produtoNoBanco.getPreco())
-//                .quantidade(produto.getQuantidade()+ produtoNoBanco.getQuantidade())
-//                .id(produtoNoBanco.getId())
-//                .build();
-//
-//        repositorio.saveAndFlush(produtoNoBancoAtualizado);
-//
-//    }
 
     public void atualizarEstoque (Long id, Integer quantidade){
 
@@ -93,14 +62,20 @@ public class ProdutosService {
 
         Integer novaQuantidade = produtoNoBanco.getQuantidade() + quantidade;
 
-        // fazer tratamento de erros caso nao quantidade seja negativa
-        if (novaQuantidade < 0) {
-            throw new RuntimeException("Estoque não pode ser negativo após a atualização.");
-        }
+        verificarQuantidade(novaQuantidade);
 
         produtoNoBanco.setQuantidade(novaQuantidade);
+
         repositorio.saveAndFlush(produtoNoBanco);
 
+    }
+
+    public void verificarQuantidade(Integer quantidade){
+
+        // fazer tratamento de erros caso nao quantidade seja negativa
+        if (quantidade < 0) {
+            throw new EstoqueInsuficienteExceptions("Estoque não pode ser negativo após a atualização.");
+        }
     }
 
 }

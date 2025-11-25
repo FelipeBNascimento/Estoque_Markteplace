@@ -5,12 +5,14 @@ import com.markteplace.bazan.markteplace_web.dto.VendasDto;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ItemVendaEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.VendaEntity;
+import com.markteplace.bazan.markteplace_web.infrastructure.exceptions.EstoqueInsuficienteExceptions;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.ItemVendaRepository;
 import com.markteplace.bazan.markteplace_web.infrastructure.repository.VendasRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,15 +32,15 @@ public class VendaService {
     }
 
     @Transactional
-    public ItemVendaEntity realizarVendas(Long id, Integer quantidade) {
+    public ItemVendaEntity realizarVendas(Long idproduto, Integer quantidade) {
 
-        ProdutosEntity produto = produtosService.mostrarProduto(id);
+        ProdutosEntity produto = produtosService.mostrarProduto(idproduto);
 
         if (produto.getQuantidade() < quantidade) {
             throw new RuntimeException("Estoque insuficiente para venda");
         }
 
-        produtosService.atualizarEstoque(id, -quantidade);
+        produtosService.atualizarEstoque(idproduto, -quantidade);
 
         ItemVendaEntity novaVenda = new ItemVendaEntity();
         novaVenda.setProdutos(produto);
@@ -82,7 +84,7 @@ public class VendaService {
     public VendaEntity variasVendas(VendasDto listaVendas) {
 
         VendaEntity novaVenda = new VendaEntity();
-        novaVenda.setData(LocalDateTime.now());
+        novaVenda.setData(LocalDate.now());
         vendas_repositorio.saveAndFlush(novaVenda);
 
 

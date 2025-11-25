@@ -33,7 +33,8 @@ public class SecurityConfig {
                         formLogin
                                 .permitAll()
                 )
-                .httpBasic(httpBasic -> {}); // Habilita autenticação HTTP Basic para APIs
+                .httpBasic(httpBasic -> {
+                }); // Habilita autenticação HTTP Basic para APIs
 
         return http.build();
     }

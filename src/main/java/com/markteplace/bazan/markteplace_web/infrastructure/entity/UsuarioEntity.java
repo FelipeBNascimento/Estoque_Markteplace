@@ -1,8 +1,8 @@
 package com.markteplace.bazan.markteplace_web.infrastructure.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
@@ -12,8 +12,9 @@ import java.math.BigDecimal;
 @Builder
 @Getter
 @Setter
-@Table(name = "produtos")
-public class ProdutosEntity {
+@Table(name = "usuarios")
+
+public class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +23,15 @@ public class ProdutosEntity {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "preco")
-    private BigDecimal preco;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "quantidade")
-    private Integer quantidade;
+    @Column(name = "senha")
+    private String senha;
 
+    @Column(name = "saldo")
+    private BigDecimal saldo;
+
+    @Column(name = "ativo")
+    private boolean ativo = true;
 }
