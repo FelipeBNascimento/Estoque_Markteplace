@@ -12,20 +12,11 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table(name = "itens_vendas")
-public class ItemVendaEntity {
+public class ItensVendidosEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_vendas;
-
-    @ManyToOne
-    @JoinColumn(name = "id_produto", nullable = false)
-    private ProdutosEntity produtos;
-
-    @ManyToOne
-    @JoinColumn (name = "venda_id")
-    private VendaEntity venda;
-
+    private Long id;
 
     @Column(name="quantidade_vendida")
     private Integer quantidade_vendida;
@@ -35,5 +26,17 @@ public class ItemVendaEntity {
 
     @Column(name = "nome_produto")
     private String nome_produto;
+
+
+    // isso aqui esta retornando mais nao precisava porque é somente o estoque vou arrumar depois
+    @ManyToOne
+    @JoinColumn(name = "id_produto", nullable = false)
+    private ProdutosEntity produtos;
+
+    // esse tbm não precisa retornar porque ai entra em um loop infinito
+    @ManyToOne
+    @JoinColumn (name = "venda_id")
+    private VendaEntity venda;
+
 
 }

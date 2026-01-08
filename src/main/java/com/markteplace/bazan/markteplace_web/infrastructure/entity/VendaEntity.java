@@ -18,7 +18,7 @@ public class VendaEntity {
     private Long id;
 
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemVendaEntity> itensVenda = new ArrayList<>();
+    private List<ItensVendidosEntity> itensVenda = new ArrayList<>();
 
     @Column (name = "DataVenda")
     private LocalDate data;

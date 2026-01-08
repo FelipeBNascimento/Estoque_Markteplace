@@ -1,6 +1,8 @@
 package com.markteplace.bazan.markteplace_web.bussines;
 
 import com.markteplace.bazan.markteplace_web.dto.ConverterUsuario;
+import com.markteplace.bazan.markteplace_web.dto.converter.Mapper;
+import com.markteplace.bazan.markteplace_web.dto.converter.MapperUpdate;
 import com.markteplace.bazan.markteplace_web.dto.requests.UsuarioRequest;
 import com.markteplace.bazan.markteplace_web.dto.responses.UsuarioResponse;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.UsuarioEntity;
@@ -17,13 +19,15 @@ public class UsuarioService {
 
     private final UsuarioRepository repository;
     private final ConverterUsuario converterUsuario;
+    private final Mapper mapper;
+    private final MapperUpdate update;
 
     public UsuarioResponse criarUsuario(UsuarioRequest request){
 
-        UsuarioEntity entity = converterUsuario.paraUsuarioEntity(request);
+        UsuarioEntity entity = mapper.paraUsuarioEntity(request);
         entity.setAtivo(true);
         UsuarioEntity usuariosalvo =  repository.save(entity);
-        UsuarioResponse response = converterUsuario.paraResponse(usuariosalvo);
+        UsuarioResponse response = mapper.paraUsuarioResponse(usuariosalvo);
         return response;
     }
 
@@ -31,14 +35,14 @@ public class UsuarioService {
 
         UsuarioEntity usuarioBanco = buscarUsuario(id);
 
-        UsuarioResponse usuario = converterUsuario.paraResponse(usuarioBanco);
+        UsuarioResponse usuario = mapper.paraUsuarioResponse(usuarioBanco);
 
         return usuario;
     }
 
     public List<UsuarioResponse> usuariosAtivos(){
 
-        List<UsuarioResponse> lista = converterUsuario.paraListaResponse(repository.findByAtivoTrue());
+        List<UsuarioResponse> lista = mapper.listaUsuariosResponse(repository.findByAtivoTrue());
 
         return lista;
     }
@@ -54,18 +58,10 @@ public class UsuarioService {
 
         UsuarioEntity usuariobanco = buscarUsuario(id);
 
-        UsuarioEntity usuarioAtualizado = UsuarioEntity.builder()
-
-                .id(usuariobanco.getId())
-                .nome(usuarioRequest.nome()!= null ? usuarioRequest.nome() : usuariobanco.getNome())
-                .email(usuarioRequest.email()!= null ? usuarioRequest.email() : usuariobanco.getEmail())
-                .saldo(usuarioRequest.saldo() != null ? usuarioRequest.saldo(): usuariobanco.getSaldo())
-                .senha(usuarioRequest.senha()!= null? usuarioRequest.senha() : usuariobanco.getSenha())
-                .ativo(true)
-                .build();
+        UsuarioEntity usuarioAtualizado = update.atualizarEntity(usuarioRequest, usuariobanco);
 
         UsuarioEntity usuarioSalvo =  repository.save(usuarioAtualizado);
-        UsuarioResponse usuarioResponse = converterUsuario.paraResponse(usuarioSalvo);
+        UsuarioResponse usuarioResponse = mapper.paraUsuarioResponse(usuarioSalvo);
         return usuarioResponse;
 
     }
