@@ -18,10 +18,14 @@ public interface Mapper {
 
     ProdutoResponse paraProdutoResponse (ProdutosEntity entity);
 
+    List<ProdutoResponse> listaDeProdutosResponse(List<ProdutosEntity> entities);
+
     @Mapping(target = "id", ignore = true)
     UsuarioEntity paraUsuarioEntity (UsuarioRequest request);
 
     UsuarioResponse paraUsuarioResponse(UsuarioEntity entity);
 
     List<UsuarioResponse> listaUsuariosResponse(List<UsuarioEntity> entities);
+
+
 }

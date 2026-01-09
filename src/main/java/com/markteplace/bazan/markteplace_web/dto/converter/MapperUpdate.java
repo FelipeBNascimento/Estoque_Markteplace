@@ -1,6 +1,8 @@
 package com.markteplace.bazan.markteplace_web.dto.converter;
 
+import com.markteplace.bazan.markteplace_web.dto.requests.ProdutoRequest;
 import com.markteplace.bazan.markteplace_web.dto.requests.UsuarioRequest;
+import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.UsuarioEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -11,4 +13,7 @@ public interface MapperUpdate {
 
     UsuarioEntity atualizarEntity(UsuarioRequest request,
                                   @MappingTarget UsuarioEntity usuarioEntity);
+
+    ProdutosEntity atualizarProduto(ProdutoRequest produtoRequest,
+                                    @MappingTarget ProdutosEntity entity);
 }

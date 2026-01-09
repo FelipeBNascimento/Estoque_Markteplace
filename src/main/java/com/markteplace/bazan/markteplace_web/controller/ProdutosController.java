@@ -2,6 +2,7 @@ package com.markteplace.bazan.markteplace_web.controller;
 
 
 import com.markteplace.bazan.markteplace_web.bussines.ProdutosService;
+import com.markteplace.bazan.markteplace_web.dto.requests.ProdutoRequest;
 import com.markteplace.bazan.markteplace_web.dto.responses.ProdutoResponse;
 import com.markteplace.bazan.markteplace_web.infrastructure.entity.ProdutosEntity;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class ProdutosController {
 
 
     @PutMapping("/{id}/preco")
-    public ResponseEntity<Void> atualizarPreco(@RequestBody ProdutosEntity produto, @PathVariable Long id) {
+    public ResponseEntity<Void> atualizarPreco(@RequestBody ProdutoRequest produto, @PathVariable Long id) {
 
         service.atualizarPreco(produto, id);
         return ResponseEntity.ok().build();
